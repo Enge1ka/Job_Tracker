@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Job Entries - Admin - ClientTaskTrack</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Auth check for admin pages
+        if (!sessionStorage.getItem('loggedInUserEmail') || sessionStorage.getItem('loggedInUserRole') !== 'admin') {
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Admin Panel - ClientTaskTrack</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="admin_dashboard.html">Admin Overview</a></li>
+            <li><a href="admin_user_management.html">User Management</a></li>
+            <li><a href="admin_category_management.html">Category Management</a></li>
+            <li><button onclick="logout()">Logout</button></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <h1>Job Entries for <span id="employeeEmailDisplay">[Employee Email]</span></h1>
+        
+        <table id="employeeSpecificJobTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Company</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Time Spent (hrs)</th>
+                    <th>Location</th>
+                    <th>Support Contract</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Job entries will be populated here by app.js -->
+            </tbody>
+        </table>
+        <p id="jobEntriesMessage" class="message" style="display: none;"></p> <!-- For error or no-data messages -->
+
+    </main>
+    <footer>
+        <p>&copy; 2024 ClientTaskTrack</p>
+    </footer>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
