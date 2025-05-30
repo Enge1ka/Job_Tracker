@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts Dashboard - ClientTaskTrack</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        if (!sessionStorage.getItem('loggedInUserEmail') || sessionStorage.getItem('loggedInUserRole') !== 'accounts') {
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Accounts Dashboard</h1>
+    </header>
+    <nav>
+        <a href="index.html">Home (Login Page)</a>
+        <button onclick="logout()">Logout</button>
+        <button onclick="openChangePasswordModal()">Change Password</button>
+        <!-- Add other navigation links specific to accounts if any -->
+    </nav>
+    <main class="container">
+        <h1>Accounts Dashboard</h1>
+        <p>Welcome, <span id="userEmailDisplay"></span>. This dashboard will allow the Accounts Department to view and filter all employee job entries, add invoice details, enter amounts payable, mark support contract statuses, export reports, and view real-time data relevant to accounting.</p>
+        
+        <section id="jobEntriesView">
+            <h2>All Job Entries</h2>
+            <p>(Job entries will be displayed and filterable here. Functionality to add invoice numbers, amounts payable, and mark support contract status per entry will be included.)</p>
+            <!-- Placeholder for table or list of job entries -->
+        </section>
+
+        <section id="reporting">
+            <h2>Reporting</h2>
+            <p>(Export options for CSV/PDF reports, including summaries by company, date range, or category, will be available here.)</p>
+            <!-- Placeholder for reporting controls -->
+        </section>
+
+        <section id="accountTools">
+            <h2>Accounting Tools</h2>
+            <p>(Tools for managing invoice details, tracking payments, and other accounting-specific utilities will be here.)</p>
+            <!-- Placeholder for accounting tools -->
+        </section>
+        
+        <hr>
+        <p><i>More sections like 'Client Management (Support Contracts)' or 'Financial Summaries' might be added later.</i></p>
+
+
+        <!-- Simple Modal for Change Password -->
+        <div id="changePasswordModal" style="display:none; position:fixed; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center; display:flex;">
+            <div style="background: #2c2c44; padding: 20px; border-radius: 5px; color: #e0e0e0; width: 300px;">
+                <h3>Change Password</h3>
+                <form id="changePasswordForm">
+                    <div>
+                        <label for="oldPassword">Old Password:</label>
+                        <input type="password" id="oldPassword" required>
+                    </div>
+                    <div>
+                        <label for="newAccPassword">New Password:</label>
+                        <input type="password" id="newAccPassword" required>
+                    </div>
+                    <div>
+                        <label for="confirmNewAccPassword">Confirm New Password:</label>
+                        <input type="password" id="confirmNewAccPassword" required>
+                    </div>
+                    <button type="submit">Submit Change</button>
+                    <button type="button" onclick="closeChangePasswordModal()">Cancel</button>
+                </form>
+                <p id="changePasswordMessage" class="error-message" style="display:none;"></p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 ClientTaskTrack</p>
+    </footer>
+    <script src="auth.js"></script> <!-- auth.js needed for logout and changePassword -->
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userEmail = sessionStorage.getItem('loggedInUserEmail');
+            if (userEmail) {
+                document.getElementById('userEmailDisplay').textContent = userEmail;
+            }
+        });
+
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'flex';
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('changePasswordModal').style.display = 'none';
+            document.getElementById('changePasswordForm').reset();
+            document.getElementById('changePasswordMessage').style.display = 'none';
+        }
+
+        document.getElementById('changePasswordForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newAccPassword').value; // Changed ID
+            const confirmNewPassword = document.getElementById('confirmNewAccPassword').value; // Changed ID
+            const messageElem = document.getElementById('changePasswordMessage');
+
+            if (newPassword !== confirmNewPassword) {
+                messageElem.textContent = "New passwords do not match.";
+                messageElem.style.display = 'block';
+                return;
+            }
+            
+            changePassword(oldPassword, newPassword, confirmNewPassword); 
+            closeChangePasswordModal();
+        });
+    </script>
+</body>
+</html>
