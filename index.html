@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClientTaskTrack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>ClientTaskTrack</h1>
+    </header>
+    <nav>
+        <ul>
+            <!-- Simplified nav for login page -->
+            <li><a href="#loginForm">Login</a></li>
+            <li><a href="#passwordResetSection" id="forgotPasswordLink">Forgot Password?</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <section id="loginForm">
+            <h2>Login</h2>
+            <form id="loginPageForm">
+                <div>
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="email" required>
+                </div>
+                <div>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <p id="loginErrorMessage" class="error-message" style="display: none;"></p>
+        </section>
+
+        <section id="passwordResetSection" style="display: none;">
+            <h2>Password Reset</h2>
+            <form id="requestPinForm">
+                <h3>Request PIN</h3>
+                <div>
+                    <label for="resetEmail">Your Email:</label>
+                    <input type="email" id="resetEmail" name="resetEmail" required>
+                </div>
+                <button type="submit">Request PIN</button>
+                <p id="requestPinMessage" style="display: none;"></p>
+            </form>
+            <hr>
+            <form id="resetWithPinForm">
+                <h3>Reset Password with PIN</h3>
+                <div>
+                    <label for="pinEmail">Email:</label>
+                    <input type="email" id="pinEmail" name="pinEmail" required>
+                </div>
+                <div>
+                    <label for="pin">PIN:</label>
+                    <input type="text" id="pin" name="pin" required>
+                </div>
+                <div>
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <button type="submit">Reset Password</button>
+                <p id="resetWithPinMessage" class="error-message" style="display: none;"></p>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 ClientTaskTrack</p>
+    </footer>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const passwordResetSection = document.getElementById('passwordResetSection');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const navUl = document.querySelector('nav ul');
+        const originalNavHtml = navUl.innerHTML; // Store original navigation
+
+        // Handle Login Form Submission
+        document.getElementById('loginPageForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const success = login(email, password); // login is from auth.js
+            const loginError = document.getElementById('loginErrorMessage');
+            if (!success) {
+                loginError.textContent = 'Invalid email or password. Please try again.';
+                loginError.style.display = 'block';
+            } else {
+                loginError.style.display = 'none';
+                // login() handles redirection, so no further action here if successful
+            }
+        });
+
+        // Show Password Reset Section
+        forgotPasswordLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            loginForm.style.display = 'none';
+            passwordResetSection.style.display = 'block';
+            navUl.innerHTML = '<li><a href="#" id="backToLoginLink">Back to Login</a></li>';
+            
+            // Add event listener for the new "Back to Login" link
+            document.getElementById('backToLoginLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                passwordResetSection.style.display = 'none';
+                loginForm.style.display = 'block';
+                navUl.innerHTML = originalNavHtml; // Restore original nav
+                // Re-attach the listener for the original forgotPasswordLink as it's part of originalNavHtml
+                document.getElementById('forgotPasswordLink').addEventListener('click', forgotPasswordLink.click);
+            });
+        });
+        
+        // Handle Request PIN Form
+        document.getElementById('requestPinForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            requestPasswordReset(email); // From auth.js, shows alert
+            const requestPinMsg = document.getElementById('requestPinMessage');
+            // Alert is handled by auth.js, here we can update a message if needed
+            // For example: requestPinMsg.textContent = "If your email exists, a PIN has been sent.";
+            // requestPinMsg.style.display = 'block';
+        });
+
+        // Handle Reset Password with PIN Form
+        document.getElementById('resetWithPinForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('pinEmail').value;
+            const pin = document.getElementById('pin').value;
+            const newPassword = document.getElementById('newPassword').value;
+            resetPasswordWithPin(email, pin, newPassword); // From auth.js, shows alert
+            const resetWithPinMsg = document.getElementById('resetWithPinMessage');
+            // Alert is handled by auth.js. We could show success/error here too.
+            // For example: resetWithPinMsg.textContent = "Password reset attempt finished.";
+            // resetWithPinMsg.style.display = 'block';
+        });
+
+    </script>
+</body>
+</html>
