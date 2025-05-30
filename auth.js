@@ -86,11 +86,72 @@ function changePassword(oldPassword, newPassword, confirmNewPassword) {
     // 4. Ensuring newPassword and confirmNewPassword match.
     // 5. Updating the password in the 'users' array (or backend).
     console.log(`Attempting to change password for ${currentUserEmail}. Old: ${oldPassword}, New: ${newPassword}, Confirm: ${confirmNewPassword}`);
-    alert("Password change functionality is not fully implemented yet. This is a placeholder.");
+    // In a real application, passwords should be hashed before storing and comparison.
+
+    let userList;
+    const storedUserList = localStorage.getItem('userManagementList');
+    if (!storedUserList) {
+        alert("Error: User data not found. Please log out and log back in.");
+        return false;
+    }
+    try {
+        userList = JSON.parse(storedUserList);
+    } catch (e) {
+        alert("Error loading user data. Please contact support.");
+        console.error("Failed to parse userManagementList:", e);
+        return false;
+    }
+
+    const userIndex = userList.findIndex(u => u.email === currentUserEmail);
+    if (userIndex === -1) {
+        alert("User not found. Please log out and log back in.");
+        return false;
+    }
+
+    const user = userList[userIndex];
+
+    if (user.password !== oldPassword) {
+        alert("Incorrect old password.");
+        return false;
+    }
+
+    if (!newPassword || newPassword.length < 6) {
+        alert("New password is too short (minimum 6 characters).");
+        return false;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+        alert("New passwords do not match.");
+        return false;
+    }
+
+    // Update password
+    userList[userIndex].password = newPassword;
+
+    // Save updated user list
+    try {
+        localStorage.setItem('userManagementList', JSON.stringify(userList));
+        alert("Password changed successfully.");
+        return true;
+    } catch (e) {
+        alert("Error saving new password. Please try again.");
+        console.error("Failed to save updated userManagementList:", e);
+        return false;
+    }
 }
 
 function requestPasswordReset(email) {
-    const user = users.find(u => u.email === email);
+    // This function should also use localStorage if userManagementList is the source of truth
+    let userListToSearch = [];
+    const storedUserList = localStorage.getItem('userManagementList');
+    if (storedUserList) {
+        userListToSearch = JSON.parse(storedUserList);
+    } else {
+        // Fallback to initialUsers if localStorage is somehow empty, though login should populate it.
+        userListToSearch = initialUsers; 
+    }
+    const user = userListToSearch.find(u => u.email === email);
+
     if (user) {
         // Simulate sending PIN
         alert(`A PIN has been sent to ${email}. The PIN is ${user.pin}. (This is for testing - in a real app, the PIN would be emailed).`);
@@ -101,15 +162,27 @@ function requestPasswordReset(email) {
 }
 
 function resetPasswordWithPin(email, pin, newPassword) {
-    const user = users.find(u => u.email === email);
+    // This function should also use localStorage if userManagementList is the source of truth
+    let userListToSearch = [];
+    const storedUserList = localStorage.getItem('userManagementList');
+    if (storedUserList) {
+        userListToSearch = JSON.parse(storedUserList);
+    } else {
+        userListToSearch = initialUsers; // Fallback
+    }
+    const user = userListToSearch.find(u => u.email === email);
+
     if (user) {
         if (user.pin === pin) {
             // In a real app, you would hash the newPassword before saving
-            // For now, we are not actually changing the hardcoded data for simplicity.
-            // If you wanted to: user.password = newPassword;
-            alert("Password has been reset successfully. (Simulated - password not actually changed in this version).");
-            // Optionally, clear the PIN or mark it as used
-            // user.pin = null; // Or generate a new one, or require re-authentication
+            // For now, we are not actually changing the user object in the list for simplicity in this simulation.
+            // To actually change it:
+            // const userIndex = userListToSearch.findIndex(u => u.email === email);
+            // if (userIndex !== -1) {
+            //    userListToSearch[userIndex].password = newPassword;
+            //    localStorage.setItem('userManagementList', JSON.stringify(userListToSearch));
+            // }
+            alert("Password has been reset successfully. (Simulated - password not actually changed for this user in the list).");
         } else {
             alert("Invalid PIN.");
         }
