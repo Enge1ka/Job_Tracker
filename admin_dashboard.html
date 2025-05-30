@@ -16,80 +16,25 @@
         <h1>Admin Dashboard</h1>
     </header>
     <nav>
-        <a href="index.html">Home (Login Page)</a>
-        <button onclick="logout()">Logout</button>
-        <button onclick="openChangePasswordModal()">Change Password</button>
-        <!-- Add other navigation links specific to admin if any -->
+        <ul>
+            <li><a href="admin_dashboard.html">Admin Overview</a></li>
+            <li><a href="admin_user_management.html">User Management</a></li>
+            <li><a href="admin_category_management.html">Category Management</a></li>
+            <li><button onclick="logout()">Logout</button></li>
+        </ul>
     </nav>
     <main class="container">
-        <p>Welcome to the admin dashboard, <span id="userEmailDisplay"></span>.</p>
+        <h1>Admin Overview</h1>
+        <p>Welcome to the Admin Dashboard, <span id="userEmailDisplay"></span>. Use the navigation above to manage users and categories, or view recent activity below.</p>
         
-        <section id="userManagementSection">
-            <h2>User Management</h2>
-            <div id="createUserContainer">
-                <h3>Create New User</h3>
-                <form id="createUserForm">
-                    <div>
-                        <label for="newUserEmail">Email:</label>
-                        <input type="email" id="newUserEmail" required>
-                    </div>
-                    <div>
-                        <label for="newUserPassword">Password:</label>
-                        <input type="password" id="newUserPassword" required>
-                    </div>
-                    <div>
-                        <label for="newUserRole">Role:</label>
-                        <select id="newUserRole" required>
-                            <option value="employee">Employee</option>
-                            <option value="accounts">Accounts</option>
-                            <option value="sales">Sales</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
-                    <button type="submit">Create User</button>
-                    <p id="createUserMessage" style="display:none;"></p>
-                </form>
+        <section id="recentActivity">
+            <h2>Recent Job Entries</h2>
+            <div id="activitySnippetsContainer">
+                <p>(Recent activity will be displayed here.)</p>
             </div>
-
-            <h3>Existing Users</h3>
-            <table id="userManagementTable">
-                <thead>
-                    <tr>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- User rows will be populated here -->
-                </tbody>
-            </table>
         </section>
 
-        <hr style="margin: 30px 0;">
-
-        <section id="categoryManagementSection">
-            <h2>Job Category Management</h2>
-            <div id="createCategoryContainer">
-                <h3>Add New Category</h3>
-                <form id="createCategoryForm">
-                    <div>
-                        <label for="newCategoryName">Category Name:</label>
-                        <input type="text" id="newCategoryName" required>
-                    </div>
-                    <button type="submit">Add Category</button>
-                    <p id="categoryMessage" style="display:none;"></p>
-                </form>
-            </div>
-
-            <h3>Existing Categories</h3>
-            <ul id="categoryListDisplay">
-                <!-- Categories will be populated here -->
-            </ul>
-        </section>
-
-        <!-- Simple Modal for Change Password -->
+        <!-- Simple Modal for Change Password (can be kept or moved to a more general 'settings' area) -->
         <div id="changePasswordModal" style="display:none; position:fixed; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center; display:flex;">
             <div style="background: #2c2c44; padding: 20px; border-radius: 5px; color: #e0e0e0; width: 300px;">
                 <h3>Change Password</h3>

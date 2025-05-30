@@ -16,10 +16,11 @@
         <h1>Employee Dashboard</h1>
     </header>
     <nav>
-        <a href="index.html">Home (Login Page)</a>
-        <button onclick="logout()">Logout</button>
-        <button onclick="openChangePasswordModal()">Change Password</button>
-        <!-- Add other navigation links specific to employee if any -->
+        <ul>
+            <li><a href="employee_dashboard.html">My Job Entries</a></li>
+            <li><button onclick="openChangePasswordModal()">Change Password</button></li> 
+            <li><button onclick="logout()">Logout</button></li>
+        </ul>
     </nav>
     <main class="container">
         <p>Welcome to your dashboard, <span id="userEmailDisplay"></span>.</p>
